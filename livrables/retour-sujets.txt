@@ -1,0 +1,4 @@
+Il faut prévoir une page de garde avec titre, numéro d'équipe (et non des
+membres).
+
+OK pour le sujet 1.
