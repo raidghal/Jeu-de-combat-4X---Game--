@@ -1,0 +1,385 @@
+@startuml
+
+class Grid {
+    - grille: Tile[][]
+    - taille: int
+    + Generation(): void
+    + creerForet(int i, int j): void
+    + creerRessource(int i, int j): void
+    + getVoisins(int i, int j): int[][]
+    + getVoisinsList(int i, int j): ArrayList<int[]>
+}
+
+class Tile {
+    - x: int
+    - y: int
+    - biome: Biome
+    - ressource: Ressource
+    - estVille: boolean
+    - EstCentre: boolean
+    - Exploite: int[]
+    - unitepresente: boolean
+    - troop: Troop
+    - city: City
+    + distance(Tile tile): int
+    + creerRessource(): void
+}
+
+class City {
+    - tiles: Tile[]
+    - name: String
+    - population: int
+    - canDo: boolean
+    - batimentConstruit: HashMap<String, Integer>
+    - CoutBatiment: HashMap<String, Integer>
+    - grid: Grid
+    - player: Player
+    - production: int
+    - food: int
+    - productionTimer: int
+    - currentlyBuilding: String
+    + addTile(Tile tile): void
+    + getPlayer(): Player
+    + getInfoCity(): int[]
+    + getGold(): int
+    + getGrid(): Grid
+    + incrementProductionTimer(): void
+    + updateParameters(): void
+    + construction(String batiment): void
+}
+
+class Player {
+    - name: String
+    - number: int
+    - gold: int
+    - cities: ArrayList<City>
+    - troops: ArrayList<Troop>
+    - vision: int[][]
+    - score: int
+    + addCity(City city): void
+    + removeCity(City city): void
+    + addTroop(Troop troop): void
+    + removeTroop(Troop troop): void
+    + getCities(): ArrayList<City>
+    + getTroops(): ArrayList<Troop>
+    + getName(): String
+    + getNumber(): int
+    + getGold(): int
+    + getVision(): int[][]
+    + getScore(): int
+    + setUpTurn(): void
+    + endTurn(): void
+}
+
+class Troop {
+    - name: String
+    - health: int
+    - damage: int
+    - price: int
+    - row: int
+    - col: int
+    - grid: Grid
+    - player: Player
+    - canMove: boolean
+    - canRender: boolean
+    - canAttack: boolean
+    + Troop(row: int, col: int, grid: Grid, player: Player)
+    + getHealth(): int
+    + setHealth(health: int): void
+    + getRow(): int
+    + getCol(): int
+    + setName(name: String): void
+    + getName(): String
+    + getPlayer(): Player
+    + getCanMove(): boolean
+    + setCanMove(canMove: boolean): void
+    + setGrid(grid: Grid): void
+    + getPrice(): int
+    + setPlayer(player: Player): void
+    + getCanRender(): boolean
+    + setCanRender(canRender: boolean): void
+    + getCanAttack(): boolean
+    + setCanAttack(canAttack: boolean): void
+    + setDamage(damage: int): void
+    + getDamage(): int
+    + move(tile: Tile): void
+    + renderTroop(batch: SpriteBatch, x: float, y: float): void
+    + attack(troop: Troop, modificateur: int): void
+}
+
+class Warrior {
+    + Warrior(row: int, col: int, grid: Grid, player: Player)
+}
+
+class Archer {
+    + Archer(row: int, col: int, grid: Grid, player: Player)
+    + attack(troop: Troop, modificateur: int): void
+}
+
+class Settler {
+    + Settler(row: int, col: int, grid: Grid, player: Player)
+    + settle(cities: ArrayList<City>): void
+}
+
+class Builder {
+    - charge: int
+    + Builder(row: int, col: int, grid: Grid, player: Player)
+    + build(tile: Tile, type: int): void
+}
+
+Troop <|-- Warrior
+Troop <|-- Archer
+Troop <|-- Settler
+Troop <|-- Builder
+
+class PerlinNoise {
+    + generatePerlinNoise(int width, int height, int octaveCount, float persistence, long seed): float[][]
+    + generatePerlinNoiseLayer(float[][] base, int width, int height, int octave): float[][]
+    + interpolate(float a, float b, float alpha): float
+}
+
+class PlayerManager {
+    - players: ArrayList<Player>
+    - currentPlayer: Player
+    - grid: Grid
+    - turnManager: TurnManager
+    - game: CivGame
+    - batch: SpriteBatch
+    + playTurns(): void
+}
+
+class GameScreen {
+    - WIDTH: int
+    - HEIGHT: int
+    - TILESIZE: int
+    - renderer: IsometricRenderer
+    - grid: Grid
+    - inputProcessor: GameInputProcessor
+    - gameUI: GameUI
+    - game: CivGame
+    - playerManager: PlayerManager
+    - turnManager: TurnManager
+    - state: State
+    - isNewGame: boolean
+    + show(): void
+    + render(float delta): void
+    + dispose(): void
+    + getGrid(): Grid
+    + getMusic(): Music
+}
+
+class MenuScreen {
+    - game: CivGame
+    - batch: SpriteBatch
+    - camera: OrthographicCamera
+    - WIDTH: int
+    - HEIGHT: int
+    - stage: Stage
+    - boutonJeu: TextButton
+    - boutonQuitter: TextButton
+    - font: BitmapFont
+    - music: Music
+    - background: Texture
+    + show(): void
+    + render(float delta): void
+    + dispose(): void
+}
+
+class EndScreen {
+    - batch: SpriteBatch
+    - camera: OrthographicCamera
+    - WIDTH: int
+    - HEIGHT: int
+    - stage: Stage
+    - boutonQuitter: TextButton
+    - font: BitmapFont
+    - music: Music
+    - winnerPlayer: Player
+    - game: CivGame
+    - background: Texture
+
+    + show(): void
+    + render(float delta): void
+}
+
+class GameUI {
+    - stage: Stage
+    - skin: Skin
+    - BGTour: Texture
+    - C_overlay: Texture
+    - tableBouton: Table
+    - tableTour: Table
+    - tableInfo: Table
+    - tableChoix: Table
+    - tableCentreVille: Table
+    - passerTour: TextButton
+    - menu: TextButton
+    - sauvegarder: TextButton
+    - font: BitmapFont
+    - labelStyle: LabelStyle
+    - turnManager: TurnManager
+    - game: CivGame
+    - batch: SpriteBatch
+    - viewport: Viewport
+    - renderer: IsometricRenderer
+    - grid: Grid
+    - overlayX: float
+    - overlayY: float
+    - textureRegionDrawableBg: TextureRegionDrawable
+    - state: State
+    - gameScreen: GameScreen
+    - TILESIZE: int
+    - playerManager: PlayerManager
+
+    + getOverlayX(): float
+    + getOverlayY(): float
+    + getC_overlay(): Texture
+    + show(): void
+    + render(): void
+    + dispose(): void
+    + getStage(): Stage
+    + setPosOverlay(int row, int col, float mousex, float mousey): void
+    + afficherChoix(int row, int col, float mousex, float mousey): void
+    + effacerChoix(): void
+    + menuProduction(City city): void
+    + menuFormation(City city): void
+    + menuConstruction(City city): void
+    + menuAchat(City city, Troop troop, Table tableFormation, Troop[] troupeAchat): void
+    + effacerStage(): void
+}
+
+class OptionScreen {
+    - game: CivGame
+    - batch: SpriteBatch
+    - camera: OrthographicCamera
+    - WIDTH: int
+    - HEIGHT: int
+    - stage: Stage
+    - boutonPetit: TextButton
+    - boutonMoyen: TextButton
+    - boutonGrand: TextButton
+    - boutonMenu: TextButton
+    - taille: int
+    - font: BitmapFont
+    - music: Music
+    - background: Texture
+    + OptionScreen(SpriteBatch batch, CivGame game, Music music)
+    + show(): void
+    + render(float delta): void
+    + dispose(): void
+}
+
+    class State {
+        - isMoving: boolean
+        - isAttacking: boolean
+        - col: int
+        - row: int
+        
+        + State()
+        + getCol(): int
+        + getRow(): int
+        + getIsMoving(): boolean
+        + getIsAttacking(): boolean
+        + setStateMove(row: int, col: int): void
+        + setStateAttack(row: int, col: int): void
+        + stopMoving(): void
+        + stopAttacking(): void
+    }
+
+
+class CivGame {
+    - batch: SpriteBatch
+    - mScreen: MenuScreen
+    
+    + create(): void
+    + render(): void
+    + dispose(): void
+}
+
+class GameInputProcessor {
+        - camera: OrthographicCamera
+        - shapeRenderer: ShapeRenderer
+        - shapePosition: Vector2
+        - position: Vector3
+        - gameUI: GameUI
+        - grid: Grid
+        - waitMove: boolean
+        - state: State
+        - TILESIZE: int = 32
+        
+        + GameInputProcessor(camera: OrthographicCamera, gameUI: GameUI, grid: Grid, state: State)
+        + touchDragged(screenX: int, screenY: int, pointer: int): boolean
+        + keyDown(keycode: int): boolean
+        + keyUp(keycode: int): boolean
+        + keyTyped(character: char): boolean
+        + touchDown(screenX: int, screenY: int, pointer: int, button: int): boolean
+        + touchUp(x: int, y: int, pointer: int, button: int): boolean
+        + mouseMoved(x: int, y: int): boolean
+        + scrolled(amountx: float, amounty: float): boolean
+        + touchCancelled(screenX: int, screenY: int, pointer: int, button: int): boolean
+}
+
+class IsometricRenderer {
+        - TILE_WIDTH: int = 32
+        - TILE_HEIGHT: int = 32
+        - grass: Texture
+        - water: Texture
+        - sky: Texture
+        - montagne: Texture
+        - mont: Texture
+        - ville: Texture
+        - plage: Texture
+        - test: Texture
+        - ressourceADessiner: Texture
+        - playerManager: PlayerManager
+        - foret: Texture
+        - exploitation: Texture[]
+        - ressources: Texture[]
+        - villeUI: Texture[]
+        
+        + IsometricRenderer(playerManager: PlayerManager)
+        + renderGround(batch: SpriteBatch, grid: Grid): void
+        + renderSprites(batch: SpriteBatch, grid: Grid): void
+        + renderRessource(batch: SpriteBatch, x: float, y: float, ressource: Tile.Ressource, tile: Tile): void
+        + renderExploitation(batch: SpriteBatch, x: float, y: float, tile: Tile, num: int): void
+    }
+
+class TurnManager {
+    - turn: int
+    - maxTurn: int
+    - endGame: boolean
+    - whoseTurn: int
+    - playerCount: int
+    
+    + TurnManager(maxTurn: int, playerCount: int)
+    + TurnManager(maxTurn: int, playerCount: int, turn: int, currentPlayer: int)
+    + nextTurn(): void
+    + getTurn(): int
+    + getWhoseTurn(): int
+    + getMaxTurn(): int
+    + getPlayerCount(): int
+    + getEndGame(): boolean
+    + setEndGame(endGame: boolean): void
+}
+
+Tile --* City
+City o-- Player
+Tile o-- Troop
+PlayerManager o-- Player
+GameScreen o-- PlayerManager
+MenuScreen o-- CivGame
+EndScreen o-- CivGame
+GameUI o-- GameScreen
+GameUI o-- CivGame
+GameUI o-- IsometricRenderer
+GameUI o-- Grid
+GameUI o-- State
+OptionScreen o-- CivGame
+PerlinNoise -- Grid
+GameInputProcessor o-- GameUI
+GameInputProcessor o-- Grid
+IsometricRenderer o-- PlayerManager
+Tile o-- Grid
+
+
+@enduml

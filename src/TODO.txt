@@ -1,0 +1,35 @@
+OVERHAUL LE GAMEUI PARCE QUE CA PUE TROP LA MERDE 
+-> c'est mieux mais bon il y a des bugs
+
+- Implémenter les mécaniques de construction avec le builder
+-> c'est implémenté mais il faut que j'ajoute les aménagements Pierre, Foret et Bétail
+-> dans l'idée c'est bon !!
+
+- Implémenter les mécaniques de combat (validé)
+-> ça marche plutot bien
+
+-Implémenter le brouillard de guerre
+->c'est bon (peut être ajouter une tuile "brouillard" pour mieux visualiser mais pas prioritaire) 
+
+
+A faire priorité : 
+
+- Rendre Le code de l'UI plus compréhensible + diagramme UML (fait)
+
+- Implémenter la formation d'unité M (Raid) (fait)
+-> j'ai refait la construction de batiment pour que ce soit plus symmétrique
+
+- Implémenter la prise de ville M (Raid + David) (fait)
+
+- Implémenter le score + la victoire au score. L (LC + Thomas)
+-> score update quand, fondation ville, aménagement, formation, construction batiment, prise de ville, et tuer d'autre unités
+
+A faire : 
+
+- Implémenter la science XL (Ossama) (fait)
+-> Méthode avec des soeuils de science a dépasser
+
+- Implémenter l'évolution des batiments et l'évolution des troupes. (Ossama) M
+-> La technologie augmente la puissance des unités
+
+
